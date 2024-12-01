@@ -7,7 +7,8 @@ public class Layer {
 
     public Layer(int inputSize, int outputSize) {
         Random random = new Random();
-        weights = new double[outputSize][inputSize];
+        // Matrice de poids : w(i,j) poids entre neuronne j de la couche précédente et neuronne i de la couche actuelle
+        weights = new double[outputSize][inputSize]; 
         biases = new double[outputSize];
 
         // Initialisation aléatoire
