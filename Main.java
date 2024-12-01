@@ -19,15 +19,13 @@ public class Main {
             int[] testLabels = DatasetLoader.loadLabels(TEST_LABELS_PATH);
             double[][] oneHotTestLabels = DatasetLoader.oneHotEncodeLabels(testLabels, 10);
 
-            // Affichage pour vérification
-            System.out.println("Train Vectors: " + trainVectors.length);
-            System.out.println("Train Labels: " + trainLabels.length);
-            System.out.println("Test Vectors: " + testVectors.length);
-            System.out.println("Test Labels: " + testLabels.length);
-            System.out.print("\n");
-            System.out.println("Train Vectors exemple: " + trainVectors[110][4]);
-            System.out.println("Train Labels exemple: " + trainLabels[108]);
-            System.out.println("One Hot Train Labels exemple: " + DatasetLoader.oneHotEncodeLabels(trainLabels, 10)[108][6]);
+            // Créer le réseau de neurones
+            NeuralNetwork nn = new NeuralNetwork(new int[] {784, 128, 64, 10});
+            // Tester le réseau de neurones sur une image
+            double[] prediction = nn.feedforward(trainVectors[0]);
+            for (int i = 0; i < prediction.length; i++) {
+                System.out.println("Classe " + i + " : " + prediction[i]);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
