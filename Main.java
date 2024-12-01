@@ -7,25 +7,39 @@ public class Main {
     private static final String TRAIN_LABELS_PATH = "./data/fashion_mnist_train_labels.csv";
     private static final String TRAIN_VECTORS_PATH = "./data/fashion_mnist_train_vectors.csv";
 
+    // Exemple d'utilisation
     public static void main(String[] args) {
+
+        // On mesure le temps total d'exécution
+        long startTime = System.currentTimeMillis();
+
+        NeuralNetwork nn = new NeuralNetwork();
         try {
-            // Charger les données d'entraînement
             double[][] trainVectors = DatasetLoader.loadVectors(TRAIN_VECTORS_PATH);
             int[] trainLabels = DatasetLoader.loadLabels(TRAIN_LABELS_PATH);
             double[][] oneHotTrainLabels = DatasetLoader.oneHotEncodeLabels(trainLabels, 10);
 
-            // Charger les données de test
             double[][] testVectors = DatasetLoader.loadVectors(TEST_VECTORS_PATH);
             int[] testLabels = DatasetLoader.loadLabels(TEST_LABELS_PATH);
             double[][] oneHotTestLabels = DatasetLoader.oneHotEncodeLabels(testLabels, 10);
 
-            // Créer le réseau de neurones
-            NeuralNetwork nn = new NeuralNetwork(new int[] {784, 128, 64, 10});
-            // Tester le réseau de neurones sur une image
-            double[] prediction = nn.feedforward(trainVectors[0]);
-            for (int i = 0; i < prediction.length; i++) {
-                System.out.println("Classe " + i + " : " + prediction[i]);
+            // Entraînement
+            nn.train(trainVectors, oneHotTrainLabels, 30);
+            // On évalue le modèle
+            double accuracy = 0;
+            for (int i = 0; i < testVectors.length; i++) {
+                double[] output = nn.feedForward(testVectors[i]);
+                int predictedLabel = Util.argmax(output);
+                if (predictedLabel == testLabels[i]) {
+                    accuracy++;
+                }
             }
+            accuracy /= testVectors.length;
+            System.out.println("Accuracy: " + accuracy);
+
+            long endTime = System.currentTimeMillis();
+            System.out.println("Execution time: " + (endTime - startTime)/1000 + "s");
+
         } catch (IOException e) {
             e.printStackTrace();
         }

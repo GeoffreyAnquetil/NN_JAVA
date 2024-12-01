@@ -32,4 +32,16 @@ public class Util {
         return probabilities;
     }
 
+    public static int argmax(double[] array) {
+        int maxIdx = 0;
+        double maxVal = array[0];
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] > maxVal) {
+                maxVal = array[i];
+                maxIdx = i;
+            }
+        }
+        return maxIdx;
+    }
+
 }   
